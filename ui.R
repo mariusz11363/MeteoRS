@@ -4,11 +4,16 @@ library(dplyr)
 library(readr)
 library(raster)
 library(compiler)
+library("efficient")
+height <<- 650
+width <<- 650
+library("profvis")
+enableJIT(3)
+tmap_mode("plot")
 
-#library("profvis")
 source("function.R")
 
-tmap_mode("plot")
+
 
 if(exists("dane")==FALSE){
   dane <<- NULL
@@ -25,7 +30,10 @@ a6 <- "Pressure"
 a7 <- "Wind speed (GUST)"
 a8 <- "CAPE"
 
+
 sidebar <- dashboardSidebar(
+
+  
   
   sidebarMenu(
     menuItem(a1, tabName = "dashboard1", icon = icon("dashboard")),
@@ -38,50 +46,69 @@ sidebar <- dashboardSidebar(
     menuItem(a8, tabName = "dashboard8", icon = icon("dashboard")),
     menuItem("Chart", icon = icon("th"), tabName = "widgets",
              badgeLabel = "new", badgeColor = "green"),
-    box(width = 15,
-        title = "Animation", status = "primary", solidHeader = T,
-        collapsible = TRUE,
-        dateInput("date",
-                  label = '',
-                  #value = Sys.Date()
-                  value = "2018-02-25"
-        ),
-        selectInput("Hour",'' ,
-                    choices = list("00:00" = "00", "06:00" = "06",
-                                   "12:00" = "12", "18:00" = "18"), selected = 1),
+    box(width = 15,background = "black",
+        title = "Animation",
+        fluidRow(
+        column(8, dateInput("date",
+                  label = 'Date',
+                  value = Sys.Date()
+                  #value = "2018-02-25"
+        )),
+        column(3, selectInput("Hour",'' ,
+                    choices = list("0" = "00", "6" = "06",
+                                   "12" = "12", "18" = "18"), selected = 1))),
         actionButton("go", "Recall"),
         sliderInput("bins", "",
-                    min = 0, max = 79,
+                    min = 0, max = 72,
                     value = 0, step = 1,
                     animate =
-                      animationOptions(interval = 600, loop = T))
+                      animationOptions(interval = 500, loop = T))
         
     )
   )
 )
 
 body <- dashboardBody(
+
+  
   tabItems(
-    tabItem(tabName = "dashboard1", h2(a1),
-            box(width=2,title = "Legend", solidHeader = TRUE,
-            collapsible = TRUE,
-            imageOutput("legend_TMP")),
-            box(uiOutput("UIPLOT_TMP"))),
+    tabItem(tabName = "dashboard1", "",
+            tabBox(title = "Temperature",id = "dashboard1",
+                   tabPanel("Maps",
+                            fluidRow(uiOutput("UIPLOT_TMP")),
+                            fluidRow(plotOutput("legend_TMP"))),
+                   tabPanel("Profile","Tymczasowy")
+                   )),
     
-    tabItem(tabName = "dashboard2", h2(a2),
-            box(uiOutput("UIPLOT_TMAX"))),
-    tabItem(tabName = "dashboard3", h2(a3),
-            box(uiOutput("UIPLOT_TMIN"))),
-    tabItem(tabName = "dashboard4", h2(a4),
-            box(uiOutput("UIPLOT_DPT"))),
-    tabItem(tabName = "dashboard5", h2(a5),
-            box(uiOutput("UIPLOT_RH"))),
-    tabItem(tabName = "dashboard6", h2(a6),
-            box(uiOutput("UIPLOT_PRMSL"))),
-    tabItem(tabName = "dashboard7", h2(a7),
-            box(uiOutput("UIPLOT_GUST"))),
-    tabItem(tabName = "dashboard8", h2(a8),
-            box(uiOutput("UIPLOT_CAPE"))),
+    tabItem(tabName = "dashboard2", "",
+            tabBox(title = "Temp. max",id = "dashboard2",
+            tabPanel("Maps",
+                     fluidRow(uiOutput("UIPLOT_TMAX")),
+                     fluidRow(plotOutput("legend_TMAX"))))),
+    tabItem(tabName = "dashboard3", "",
+            tabBox(title = "Temp. min",id = "dashboard3",
+                   tabPanel("Maps",
+                            fluidRow(uiOutput("UIPLOT_TMIN")),
+                            fluidRow(plotOutput("legend_TMIN"))))),
+    tabItem(tabName = "dashboard4", "",
+            tabBox(title = "Dew point",id = "dashboard4",
+                   tabPanel("Maps",
+                            fluidRow(uiOutput("UIPLOT_DPT")),
+                            fluidRow(plotOutput("legend_DPT"))))),
+   tabItem(tabName = "dashboard5", "",
+            tabBox(title = "Relative hum.",id = "dashboard5",
+                   tabPanel("Maps",
+                            fluidRow(uiOutput("UIPLOT_RH")),
+                            fluidRow(plotOutput("legend_RH"))))),
+   tabItem(tabName = "dashboard6", "",
+           tabBox(title = "Press. see lvl",id = "dashboard6",
+                  tabPanel("Maps",uiOutput("UIPLOT_PRMSL")))),
+   tabItem(tabName = "dashboard7", "",
+           tabBox(title = "Wind (gust)",id = "dashboard7",
+                  tabPanel("Maps",uiOutput("UIPLOT_GUST")))),
+    tabItem(tabName = "dashboard8", "",
+          tabBox(title = "CAPE",id = "dashboard8",
+                 tabPanel("Maps",uiOutput("UIPLOT_CAPE")))),
     
     
     
@@ -104,7 +131,10 @@ body <- dashboardBody(
 # Put them together into a dashboardPage
 dashboardPage(
   
+  
   dashboardHeader(title = "Meteo",
+                  
+                  
                   dropdownMenuOutput("messageMenu"),
                   dropdownMenu(type = "tasks", badgeStatus = "success",
                                taskItem(value = 90, color = "green",
