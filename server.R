@@ -1,4 +1,5 @@
 data("Europe")
+
 #setwd("D:/Moje dokumenty/Praca_magisterska/MagisterkaNetCDF/shiny-master/")
 
 messageData<-data.frame(1,1)
@@ -47,17 +48,16 @@ output$loadtext <-   renderText({
  
     observeEvent(input$go, {
       
-      output[["TMP"]] <- renderPlot(execOnResize = T, res = 40,{
-        dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
-        create_raster(minus=-273.15,time = input$bins,rodzaj = "TMP",start = -40,stop = 40,by = 5,pinput = dinput, 
+      output[["TMP"]] <- renderPlot(execOnResize = T, res = 30,{
+        create_raster(time = input$bins,start = -40,stop = 40,by=1,type="TMP",
                       colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
                                "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
-                               "#FF9933","#FF9900","#FF6600","#FF0000","#660000"))
+                               "#FF9900","#FF6600","#FF0000","#660000"))
       })
       output$legend_TMP <- renderPlot(width=width, height=150,{legend_to_map(
         colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
       "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00","#FF9933",
-      "#FF9900","#FF6600","#FF0000","#660000"))})
+      "#FF6600","#FF0000","#660000"))})
       
       
       
@@ -76,17 +76,17 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["TMAX"]] <- renderPlot(execOnResize = T, res = 40,{
+    output[["TMAX"]] <- renderPlot(execOnResize = T, res = 30,{
       dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
-      create_raster(minus=-273.15,time = input$bins,rodzaj = "TMAX",start = -40,stop = 40,pinput = dinput, 
-                    colory=c("#330033","#330066","#330099","#3300CC","#3366CC","#336666",
+      create_raster(time = input$bins,start = -40,stop = 40,by=1,type="TMAX",
+                    colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
                              "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
-                             "#FF9933","#FF9900","#FF6600","#FF3300","#FF0000","#660000"))
+                             "#FF9900","#FF6600","#FF0000","#660000"))
     })
     
     output$legend_TMAX <- renderPlot(width=width, height=150,{legend_to_map(
       colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
-               "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00","#FF9933",
+               "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
                "#FF9900","#FF6600","#FF0000","#660000"))})
     
   })
@@ -95,18 +95,17 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["TMIN"]] <- renderPlot(execOnResize = T, res = 40,{
-      dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
-      create_raster(minus=-273.15,time = input$bins,rodzaj = "TMIN",start = -40,stop = 40,by = 1,pinput = dinput, 
-                    colory=c("#330033","#330066","#330099","#3300CC","#3366CC","#336666",
+    output[["TMIN"]] <- renderPlot(execOnResize = T, res = 30,{
+      create_raster(time = input$bins,start = -40,stop = 40,by=1,type="TMIN",
+                    colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
                              "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
-                             "#FF9933","#FF9900","#FF6600","#FF3300","#FF0000","#660000"))
+                             "#FF9900","#FF6600","#FF0000","#660000"))
     })
     
     
     output$legend_TMIN <- renderPlot(width=width, height=150,{legend_to_map(
       colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
-               "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00","#FF9933",
+               "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
                "#FF9900","#FF6600","#FF0000","#660000"))})
   })
   
@@ -115,16 +114,15 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["DPT"]] <- renderPlot(execOnResize = T, res = 40,{
-      dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
-      create_raster(minus=-273.15,time = input$bins,rodzaj = "DPT",start = -40,stop = 40,by = 1,pinput = dinput, 
-                    colory=c("#330033","#330066","#330099","#3300CC","#3366CC","#336666",
+    output[["DPT"]] <- renderPlot(execOnResize = T, res = 30,{
+      create_raster(time = input$bins,start = -40,stop = 40,by=1,type="DPT",
+                    colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
                              "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
-                             "#FF9933","#FF9900","#FF6600","#FF3300","#FF0000","#660000"))
+                             "#FF9900","#FF6600","#FF0000","#660000"))
     })
     output$legend_DPT <- renderPlot(width=width, height=150,{legend_to_map(
       colory=c("#330033","#330066","#3300CC","#3366CC","#336666",
-               "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00","#FF9933",
+               "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
                "#FF9900","#FF6600","#FF0000","#660000"))})
   })
   ######
@@ -132,13 +130,12 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["RH"]] <- renderPlot(execOnResize = T, res = 40,{
-      dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
-      create_raster(minus=0,time = input$bins,rodzaj = "RH",start = 0,stop = 100,by = 1,pinput = dinput, 
-                    colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2"))
+    output[["RH"]] <- renderPlot(execOnResize = T, res = 30,{
+      create_raster(time = input$bins,start = 0,stop = 100,by=1,type="RH",
+                    colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2","#330033"))
     })
     output$legend_RH<- renderPlot(width=width, height=150,{legend_to_map(start = 0,stop = 100, by = 1, by_leg = 10, col_n = 100,
-      colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2"))})
+         colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2","#330033"))})
   })
   ##############
   
@@ -146,14 +143,13 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["PRMSL"]] <- renderPlot(execOnResize = T, res = 40,{
+    output[["PRMSL"]] <- renderPlot(execOnResize = T, res = 30,{
       dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
-      create_raster(minus=0,reduce=100,time = input$bins,rodzaj = "PRMSL",start = 850,stop = 1200,by = 25,pinput = dinput, 
-                    colory=c("#330033","#330066","#330099","#3300CC","#3366CC","#336666",
-                             "#33FF66","#33FF00", "#FFFF66", "#FFFF33", "#FFFF00",
-                             "#FF9933","#FF9900","#FF6600","#FF3300","#FF0000","#660000")[17:1])
+      create_raster(minus=0,reduce=100,time = input$bins,rodzaj = "PRMSL",start = 850,stop = 1200,by = 2,pinput = dinput, 
+                    colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2","#330033"))
     })
-    
+    output$legend_PRMSL<- renderPlot(width=width, height=150,{legend_to_map(start = 850,stop = 1200, by = 2, by_leg = 50, col_n = 175,
+    colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2","#330033"))})
   })
   
   
@@ -161,7 +157,7 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["GUST"]] <- renderPlot(execOnResize = T, res = 40,{
+    output[["GUST"]] <- renderPlot(execOnResize = T, res = 30,{
       dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
       create_raster(minus=0,time = input$bins,rodzaj = "GUST",start = 0,stop = 30,by = 2,pinput = dinput, 
                     colory=c("#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2"))
@@ -177,7 +173,7 @@ output$TMP_PROFILE <- renderPlot({
   
   observeEvent(input$go, {
     
-    output[["CAPE"]] <- renderPlot(execOnResize = T, res = 40,{
+    output[["CAPE"]] <- renderPlot(execOnResize = T, res = 30,{
       dinput <- isolate(paste(gsub("-","",input$date),input$Hour, sep=""))
       create_raster(minus=0,time = input$bins,rodzaj = "CAPE",start = 0,stop = 2500,by = 100,pinput = dinput, 
                     colory=c("white","#D1FFF7", "#B3F6CC", "#A0EE97", "#B9E57D", "#DDD764", "#D48E4D", "#CC3837", "#C3236E", "#BB11B1","#6800B2"))
